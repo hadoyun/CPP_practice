@@ -2,57 +2,32 @@
 #include <iostream>
 #include <atomic>
 #include <mutex>
-//mutual exclusion - »óÈ£ ¹èÁ¦ // Àá±×°í ÇØÁ¦ ÇÏ´Â °ÍÀ» ÇØÁà¾ßÇÔ...!
+//mutual exclusion - ìƒí˜¸ ë°°ì œ // ìž ê·¸ê³  í•´ì œ í•˜ëŠ” ê²ƒì„ í•´ì¤˜ì•¼í•¨...!
+
+void plus(int a)
+{
+	for (int i = 0; i < 10000; ++i)
+	{
+		++a;
+	}
+}
 
 int main()
 {
-	int a{}; // ÀÓ°è ±¸¿ª (critical section - Áß¿äÇÑ ºÎºÐ)
+	unsigned int aaa = (unsigned int)'ìž„';
+	int a{}; // ìž„ê³„ êµ¬ì—­ (critical section - ì¤‘ìš”í•œ ë¶€ë¶„)
 
-	//std::atomic<int> a{}; //ÇÑ¹ø ¿¬»êÀ» ³¡³¯ ¶§±îÁö´Â ´Ù¸¥ ¾²·¹µå°¡ Á¢±ÙÇÏÁö ¸øÇÏ°Ô ÇÔ,
-	// ´Ù¸¥ ÇÔ¼ö°¡ ¸ø°Çµê (º¸È£µÈ ÀÓ°è±¸¿ª)
+	//std::atomic<int> a{}; //í•œë²ˆ ì—°ì‚°ì„ ëë‚  ë•Œê¹Œì§€ëŠ” ë‹¤ë¥¸ ì“°ë ˆë“œê°€ ì ‘ê·¼í•˜ì§€ ëª»í•˜ê²Œ í•¨,
+	// ë‹¤ë¥¸ í•¨ìˆ˜ê°€ ëª»ê±´ë“¦ (ë³´í˜¸ëœ ìž„ê³„êµ¬ì—­)
 
 	int b{ 77 };
 
 	std::mutex mut{};
-
-	std::thread thr_add
-	{
-		[&]()
-		{
-			for (int i = 0; i < 10000; ++i)
-			{
-				mut.lock();
-				++a;	
-				mut.unlock();
-			}
-		}
-		//ÀÌ°Í ÀÚÃ¼°¡ ÇÏ³ªÀÇ ¸í·É¾î! 
-		//thread¸¦ ÃÊ±âÈ­
-	};
-
-	std::thread thr_subtract
-	{
-		[&]()
-		{
-			for (int i = 0; i < 10000; ++i)
-			{
-				mut.lock();
-				--a;
-				mut.unlock();
-			}
-		}
-	};
-
-	// ÀÌ ½º·¹µå°¡ ³¡³¯ ¶§ ±îÁö ±â´Ù¸®°Ú´Ù.
-	// ¸ÞÀÎ ½º·¹µå·Î ´Ù½Ã ¿Í¶ó ±â´Ù·Á¶ó
-	thr_add.join(); 
-	thr_subtract.join();
-
-	std::cout << a;
-	//undefinded behavior 
+	
 
 
-	//ÀÌ¸§ ´ë½Å¿¡ []¸¦ »ç¿ëÇÑ´Ù.
+
+	//ì´ë¦„ ëŒ€ì‹ ì— []ë¥¼ ì‚¬ìš©í•œë‹¤.
 	/*[]()
 	{
 
